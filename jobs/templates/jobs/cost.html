@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Cost Data</title>
+  </head>
+  <body>
+    <h1>Cost Data</h1>
+    <p>Last date is: <strong>{{ lastData.dateModel }}</strong>, where:</p>
+    <ul>
+      <li>Net Income = <strong>Rp {{ lastData.incomeModel }}</strong></li>
+      <li>Cost = <strong>Rp {{ lastData.costModel }}</strong></li>
+      <li>Profit = <strong>Rp {{ lastData.profitModel }}</strong></li>
+    </ul>
+    <p>Highest data:</p>
+    <ul>
+      <li>Highest net income from database is: <strong>Rp {{ topIncome.costModel }}</strong> on {{ topIncome.dateModel }}</li>
+      <li>Highest cost from database is: <strong>Rp {{ topCost.costModel }}</strong> on {{ topCost.dateModel }}</li>
+    </ul>
+
+    <p>
+      <label>Gross Income:</label>
+      <input type="text" id="income" value="0"/>
+    </p>
+    <button id="incomeButton">Generate Net Income</button>
+
+    <form class="" action="{% url 'cost' %}" method="post">
+    {% csrf_token %}
+      <p>
+        <label>Date:</label>
+        <input type="text" name="dateValue" value="{% now "Y-m-d" %}"/>
+      </p>
+      <p>
+        <label>Cost:</label>
+        <input type="text" name="costValue" value="0"/>
+      </p>
+      <!--hidden input-->
+      <input type="hidden" name="incomeValue" value="" id="js_data_input"/>
+      <!--submit form-->
+      <input type="submit" value="Submit"/>
+    </form>
+
+    <script>
+      const body = document.getElementsByTagName('body')[0];
+      const para = document.createElement('p');
+      const incomeButton = document.getElementById('incomeButton');
+      incomeButton.onclick = () => {
+        const income = Math.round(document.getElementById('income').value * 0.7);
+        document.getElementById('js_data_input').value = income;
+        para.textContent = `Net income - 30% tax = Rp ${income} (rounded)`;
+        body.appendChild(para);
+      }
+
+    </script>
+
+  </body>
+</html>
